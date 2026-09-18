@@ -39,7 +39,9 @@ const process = [
   ['04', 'Build', 'Develop the site using modern, performant code.'],
   ['05', 'Refine', 'Test, optimize, polish, and launch.'],
 ]
-function Arrow() { return <span className="arrow" aria-hidden="true">↗</span> }
+function Arrow() { 
+  return <span className="arrow" aria-hidden="true">↗\uFE0E</span> 
+}
 function SocialLinks() {
   return <div className="footer-links" aria-label="Social links"><a href="https://www.instagram.com/stephkrueger.exe/" target="_blank" rel="noreferrer" aria-label="Instagram" title="Instagram"><svg className="social-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4.25" /><circle cx="17.4" cy="6.7" r="1" className="social-dot" /></svg></a><a href="https://www.facebook.com/stephkruegerexe/" target="_blank" rel="noreferrer" aria-label="Facebook" title="Facebook"><svg className="social-icon social-facebook" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.2 21v-8h2.7l.4-3.1h-3.1v-2c0-.9.3-1.5 1.6-1.5h1.7V3.6c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.1H8v3.1h2.8v8h3.4Z" /></svg></a><a className="privacy-footer-link" href="/privacy">Privacy</a></div>
 }
