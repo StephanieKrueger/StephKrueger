@@ -2,6 +2,62 @@ import { useEffect, useState } from 'react'
 import './App.css'
 
 type Project = { slug: string; title: string; category: string; description: string; year: string; image: string; className: string; portrait?: boolean; caseStudy?: boolean; liveUrl?: string }
+const siteUrl = 'https://www.stephkrueger.com'
+const defaultSocialImage = `${siteUrl}/images/web/Rain-s-Kitchen-Cooking-Through-the-Storm.png`
+
+type PageMetadata = {
+  title: string
+  description: string
+  path: string
+  image?: string
+  robots?: string
+}
+
+function setMeta(selector: string, attribute: 'name' | 'property', key: string, content: string) {
+  let element = document.head.querySelector<HTMLMetaElement>(selector)
+  if (!element) {
+    element = document.createElement('meta')
+    element.setAttribute(attribute, key)
+    document.head.appendChild(element)
+  }
+  element.content = content
+}
+
+function RouteMetadata({ title, description, path, image = defaultSocialImage, robots = 'index, follow' }: PageMetadata) {
+  useEffect(() => {
+    const canonicalUrl = `${siteUrl}${path}`
+    document.title = title
+
+    let canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]')
+    if (!canonical) {
+      canonical = document.createElement('link')
+      canonical.rel = 'canonical'
+      document.head.appendChild(canonical)
+    }
+    canonical.href = canonicalUrl
+
+    setMeta('meta[name="description"]', 'name', 'description', description)
+    setMeta('meta[name="robots"]', 'name', 'robots', robots)
+    setMeta('meta[property="og:title"]', 'property', 'og:title', title)
+    setMeta('meta[property="og:description"]', 'property', 'og:description', description)
+    setMeta('meta[property="og:url"]', 'property', 'og:url', canonicalUrl)
+    setMeta('meta[property="og:image"]', 'property', 'og:image', image)
+    setMeta('meta[name="twitter:title"]', 'name', 'twitter:title', title)
+    setMeta('meta[name="twitter:description"]', 'name', 'twitter:description', description)
+    setMeta('meta[name="twitter:image"]', 'name', 'twitter:image', image)
+  }, [title, description, path, image, robots])
+
+  return null
+}
+
+const pageMetadata = {
+  home: { title: 'Stephanie Krueger | Web Developer & Designer in Texoma, Texas', description: 'Stephanie Krueger is a Texoma web developer and designer creating distinctive, high-performance websites, brands, and photography.', path: '/' },
+  about: { title: 'About Stephanie Krueger | Web Developer & Designer', description: 'Meet Stephanie Krueger, an independent web developer and designer in Texoma blending creative direction, branding, photography, and code.', path: '/about' },
+  projects: { title: 'Selected Work | Stephanie Krueger', description: 'Explore selected website, design, and photography work by Stephanie Krueger, an independent creative based in Texoma, Texas.', path: '/projects' },
+  'web-development': { title: 'Web Development in Texoma, Texas | Stephanie Krueger', description: 'Custom responsive, accessible, high-performance websites for businesses, artists, restaurants, and organizations in Texoma and beyond.', path: '/web-development' },
+  'graphic-design': { title: 'Graphic Design & Brand Strategy | Stephanie Krueger', description: 'Graphic design, brand strategy, identity, typography, and digital systems shaped for businesses and creative people in Texoma and beyond.', path: '/graphic-design' },
+  photography: { title: 'Photography in Texoma, Texas | Stephanie Krueger', description: 'Editorial food, hospitality, music, family, and lifestyle photography by Stephanie Krueger in the Texoma region and beyond.', path: '/photography' },
+} satisfies Record<string, PageMetadata>
 const projects: Project[] = [
   { slug: 'aura-and-ash', title: 'Aura & Ash', category: 'Web Development / UI/UX', description: 'A serene, high converting landing page mockup designed for a boutique yoga and wellness studio, featuring a custom interactive class schedule.', year: '2026', image: '/images/web/aura-and-ash.png', className: 'project-wide', caseStudy: false },
   { slug: 'serene-lake-texoma', title: 'Serene Lake Texoma', category: 'Landscape & Nature', description: 'Natural landscape photography capturing a peaceful lake bordered by lush green trees and an open sky.', year: 'July 7, 2026', image: '/images/photography/lake-2.jpg', className: 'project-tall', caseStudy: false },
@@ -115,7 +171,6 @@ function ProjectCarousel() {
 function CaseStudyPage({ project }: { project: Project }) {
   const projectIndex = caseStudyProjects.findIndex((item) => item.slug === project.slug)
   const nextProject = caseStudyProjects[(projectIndex + 1) % caseStudyProjects.length]
-  useEffect(() => { const previousTitle = document.title; document.title = `${project.title} — Stephanie Krueger`; return () => { document.title = previousTitle } }, [project.title])
   return <div className="site-shell case-study-page"><SkipLink /><SiteHeader label="Case study navigation" links={[{ label: 'Home', href: '/' }, { label: 'All work', href: '/projects' }, { label: 'About', href: '/about' }, { label: 'Contact', href: '/#contact' }]} /><main id="top"><section className="case-study-hero section-pad"><div className="hero-meta eyebrow"><span>Case study / 0{projectIndex + 1}</span><span>{project.category}<br />{project.year}</span></div><h1>{project.title}</h1><p className="case-study-intro">{project.description}</p><div className="case-study-hero-image"><img src={project.image} alt={`${project.title} project visual`} /></div></section><section className="case-study-overview section-pad"><div className="case-study-label eyebrow">01 / Overview</div><div className="case-study-overview-copy"><h2>A project with<br /><em>a point of view.</em></h2><p className="body-copy">[ Add a concise project overview here. Describe what this project is, who it serves, and why it mattered. ]</p></div><dl className="case-study-facts"><div><dt>Client</dt><dd>[ Client / organization ]</dd></div><div><dt>Services</dt><dd>{project.category}</dd></div><div><dt>Year</dt><dd>{project.year}</dd></div></dl></section><section className="case-study-process section-pad"><div className="case-study-label eyebrow">02 / The process</div><div className="case-study-columns"><article><span>Challenge</span><h3>[ The problem to solve ]</h3><p>[ Describe the business, audience, or creative challenge here. ]</p></article><article><span>Strategy</span><h3>[ The direction forward ]</h3><p>[ Explain the strategic decisions, content direction, or brand thinking here. ]</p></article><article><span>Design</span><h3>[ The visual system ]</h3><p>[ Describe the interface, identity, typography, or image direction here. ]</p></article><article><span>Build</span><h3>[ The thing behind the thing ]</h3><p>[ Describe the development approach, accessibility, performance, and maintenance here. ]</p></article></div></section><section className="case-study-gallery section-pad"><div className="case-study-label eyebrow">03 / Visual assets</div><div className="case-study-gallery-grid"><img src={project.image} alt={`${project.title} project detail`} /><div className="case-study-placeholder">[ Additional photography / visual asset ]</div><div className="case-study-placeholder">[ Detail image / screen capture ]</div></div></section><section className="case-study-result section-pad"><p className="kicker">04 / Final result</p><h2>[ Add the final result<br /><em>when it is ready.</em> ]</h2><p className="body-copy">[ Add a short description of the final deliverable and any verified outcomes. Do not add statistics or testimonials until they are available. ]</p><div className="case-study-tech"><span>Technologies</span><strong>[ Add technologies used ]</strong></div></section><section className="case-study-next section-pad"><p className="kicker">Next project</p><a href={`/projects/${nextProject.slug}`}><span>{nextProject.category}</span><h2>{nextProject.title} <Arrow /></h2></a><a className="text-link" href="/projects">Back to all work <Arrow /></a></section></main><footer className="site-footer"><a className="wordmark" href="/"><span>S</span>TEPHANIE KRUEGER<span className="wordmark-dot">.</span></a><p>Web development / design / photography<br />Texoma, Texas + everywhere</p><SocialLinks /><p className="copyright">© {new Date().getFullYear()} Stephanie Krueger</p></footer></div>
 }
 
@@ -152,18 +207,18 @@ function AboutPage() {
 
 function App() {
   const categorySlug = window.location.pathname.match(/^\/(web-development|graphic-design|photography)\/?$/)?.[1] as CategorySlug | undefined
-  if (categorySlug) return <CategoryPage slug={categorySlug} />
+  if (categorySlug) return <><RouteMetadata {...pageMetadata[categorySlug]} /><CategoryPage slug={categorySlug} /></>
   const projectSlug = window.location.pathname.match(/^\/projects\/([^/]+)\/?$/)?.[1]
   const caseStudyProject = caseStudyProjects.find((project) => project.slug === projectSlug)
-  if (caseStudyProject) return <CaseStudyPage project={caseStudyProject} />
-  if (window.location.pathname === '/projects' || window.location.pathname === '/projects/') return <ProjectsPage />
-  if (window.location.pathname === '/about' || window.location.pathname === '/about/') return <AboutPage />
-  if (window.location.pathname === '/thanks' || window.location.pathname === '/thanks/') return <SiteInfoPage kind="thanks" />
-  if (window.location.pathname === '/privacy' || window.location.pathname === '/privacy/') return <SiteInfoPage kind="privacy" />
-  if (window.location.pathname !== '/') return <SiteInfoPage kind="not-found" />
+  if (caseStudyProject) return <><RouteMetadata title={`${caseStudyProject.title} | Stephanie Krueger`} description={caseStudyProject.description} path={`/projects/${caseStudyProject.slug}`} image={`${siteUrl}${caseStudyProject.image}`} robots="noindex, nofollow" /><CaseStudyPage project={caseStudyProject} /></>
+  if (window.location.pathname === '/projects' || window.location.pathname === '/projects/') return <><RouteMetadata {...pageMetadata.projects} /><ProjectsPage /></>
+  if (window.location.pathname === '/about' || window.location.pathname === '/about/') return <><RouteMetadata {...pageMetadata.about} /><AboutPage /></>
+  if (window.location.pathname === '/thanks' || window.location.pathname === '/thanks/') return <><RouteMetadata title="Thanks | Stephanie Krueger" description="Thanks for reaching out to Stephanie Krueger." path="/thanks" robots="noindex, nofollow" /><SiteInfoPage kind="thanks" /></>
+  if (window.location.pathname === '/privacy' || window.location.pathname === '/privacy/') return <><RouteMetadata title="Privacy Policy | Stephanie Krueger" description="Privacy policy for stephkrueger.com." path="/privacy" robots="noindex, follow" /><SiteInfoPage kind="privacy" /></>
+  if (window.location.pathname !== '/') return <><RouteMetadata title="Page Not Found | Stephanie Krueger" description="The page you requested could not be found." path={window.location.pathname} robots="noindex, nofollow" /><SiteInfoPage kind="not-found" /></>
 
   return (
-    <div className="site-shell">
+    <><RouteMetadata {...pageMetadata.home} /><div className="site-shell">
       <SkipLink />
       <SiteHeader label="Main navigation" links={[{ label: 'Work', href: '#work' }, { label: 'Services', href: '#services' }, { label: 'About', href: '#about' }, { label: 'Photography', href: '#photography' }]} />
       <main id="top">
@@ -203,7 +258,7 @@ function App() {
         <section className="contact section-pad" id="contact"><div className="contact-top"><p className="kicker">Have something worth building?</p><p className="eyebrow">Let’s make it real</p></div><h2>Tell me what you’re working on.<br /><em>I’ll bring the design,</em><br />the code, or both.</h2><form className="contact-form" action="https://formsubmit.co/stephanie.krueger@mail.com" method="POST"><input type="hidden" name="_subject" value="New project inquiry from stephkrueger.com" /><input type="hidden" name="_template" value="table" /><input type="hidden" name="_next" value="https://stephkrueger.com/thanks" /><div className="form-row"><label>Name<input type="text" name="name" placeholder="Your name" required /></label><label>Email<input type="email" name="email" placeholder="you@studio.com" required /></label></div><div className="form-row"><label>Business / Organization<input type="text" name="business" placeholder="Who are we building for?" /></label><label>Project type<select name="type" defaultValue="" required><option value="" disabled>Select one</option><option>Web Development</option><option>UI/UX Design</option><option>Brand Strategy</option><option>Photography</option></select></label></div><div className="form-row"><label>Budget<select name="budget" defaultValue=""><option value="" disabled>Choose a range</option><option>$2k – $5k</option><option>$5k – $10k</option><option>$10k+</option><option>Let’s talk</option></select></label><label>Project details<textarea name="details" placeholder="A few words about the idea..." required></textarea></label></div><button className="button button-cream" type="submit">Start a project <Arrow /></button></form></section>
       </main>
       <footer className="site-footer"><a className="wordmark" href="#top"><span>S</span>TEPHANIE KRUEGER<span className="wordmark-dot">.</span></a><p>Web development / design / photography<br />Texoma, Texas + everywhere</p><SocialLinks /><p className="copyright">© {new Date().getFullYear()} Stephanie Krueger</p></footer>
-    </div>
+    </div></>
   )
 }
 
