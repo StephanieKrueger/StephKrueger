@@ -58,6 +58,52 @@ const pageMetadata = {
   'graphic-design': { title: 'Graphic Design & Brand Strategy | Stephanie Krueger', description: 'Graphic design, brand strategy, identity, typography, and digital systems shaped for businesses and creative people in Texoma and beyond.', path: '/graphic-design' },
   photography: { title: 'Photography in Texoma, Texas | Stephanie Krueger', description: 'Editorial food, hospitality, music, family, and lifestyle photography by Stephanie Krueger in the Texoma region and beyond.', path: '/photography' },
 } satisfies Record<string, PageMetadata>
+
+const siteStructuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${siteUrl}/#organization`,
+      name: 'Stephanie Krueger',
+      url: siteUrl,
+      description: 'Independent web development, design, brand strategy, and photography based in Texoma, Texas.',
+      image: defaultSocialImage,
+      areaServed: [
+        { '@type': 'AdministrativeArea', name: 'Texoma' },
+        { '@type': 'Country', name: 'United States' },
+      ],
+      sameAs: [
+        'https://www.instagram.com/stephkrueger.exe/',
+        'https://www.facebook.com/stephkruegerexe/',
+      ],
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: 'Creative services',
+        itemListElement: [
+          { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Custom Web Development' } },
+          { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'UI/UX Design' } },
+          { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Brand Strategy' } },
+          { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Food Photography' } },
+          { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Band and Music Photography' } },
+          { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Family and Lifestyle Photography' } },
+        ],
+      },
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${siteUrl}/#website`,
+      url: siteUrl,
+      name: 'Stephanie Krueger',
+      publisher: { '@id': `${siteUrl}/#organization` },
+    },
+  ],
+}
+
+function SiteStructuredData() {
+  const json = JSON.stringify(siteStructuredData).replace(/</g, '\\u003c')
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: json }} />
+}
 const projects: Project[] = [
   { slug: 'aura-and-ash', title: 'Aura & Ash', category: 'Web Development / UI/UX', description: 'A serene, high converting landing page mockup designed for a boutique yoga and wellness studio, featuring a custom interactive class schedule.', year: '2026', image: '/images/web/aura-and-ash.png', className: 'project-wide', caseStudy: false },
   { slug: 'serene-lake-texoma', title: 'Serene Lake Texoma', category: 'Landscape & Nature', description: 'Natural landscape photography capturing a peaceful lake bordered by lush green trees and an open sky.', year: 'July 7, 2026', image: '/images/photography/lake-2.jpg', className: 'project-tall', caseStudy: false },
@@ -218,7 +264,7 @@ function App() {
   if (window.location.pathname !== '/') return <><RouteMetadata title="Page Not Found | Stephanie Krueger" description="The page you requested could not be found." path={window.location.pathname} robots="noindex, nofollow" /><SiteInfoPage kind="not-found" /></>
 
   return (
-    <><RouteMetadata {...pageMetadata.home} /><div className="site-shell">
+    <><RouteMetadata {...pageMetadata.home} /><SiteStructuredData /><div className="site-shell">
       <SkipLink />
       <SiteHeader label="Main navigation" links={[{ label: 'Work', href: '#work' }, { label: 'Services', href: '#services' }, { label: 'About', href: '#about' }, { label: 'Photography', href: '#photography' }]} />
       <main id="top">
