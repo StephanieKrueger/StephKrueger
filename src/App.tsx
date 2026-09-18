@@ -171,7 +171,21 @@ function App() {
         <section className="statement section-pad" id="about"><div className="section-index eyebrow">(02 — 06)</div><div className="statement-content"><p className="kicker">A little context</p><h2>Design gets attention.<br /><em>Code keeps it there.</em></h2><p className="body-copy">I work across design, development, branding, and photography to create cohesive digital identities, not disconnected deliverables. Every project is a chance to make something considered, useful, and unmistakably its own.</p><a className="text-link" href="/about">More about me <Arrow /></a></div><div className="statement-note">For people building<br />something with a pulse.</div></section>
         <section className="work section-pad" id="work"><div className="section-heading"><div><p className="kicker">Selected work</p><h2>Made to be<br /><em>remembered.</em></h2></div><p className="section-index eyebrow">(03 — 06)</p></div><ProjectCarousel /></section>
         <section className="services section-pad" id="services"><div className="section-heading"><div><p className="kicker">What I do</p><h2>Many disciplines.<br /><em>One point of view.</em></h2></div><p className="section-index eyebrow">(04 — 06)</p></div><div className="service-list">{services.map(([number, title, description]) => <article className="service-row" key={title}><span className="service-number">{number}</span><h3>{title}</h3><p>{description}</p><span className="service-plus" aria-hidden="true">+</span></article>)}</div></section>
-        <section className="philosophy section-pad"><div className="philosophy-top"><p className="kicker">The point of the work</p><p className="eyebrow">Design ↔ Code</p></div><h2>Design without performance<br />is <em>decoration.</em><br />Code without design<br />is <em>infrastructure.</em></h2><div className="philosophy-bottom"><p>My practice brings both disciplines to the table: visually distinctive websites that stay fast, responsive, accessible, and maintainable long after launch.</p><span className="philosophy-symbol inline-block align-middle" aria-hidden="true">
+        <section className="philosophy section-pad"><div className="philosophy-top"><p className="kicker">The point of the work</p><p className="eyebrow flex items-center gap-2">
+  Design 
+  <svg 
+    className="w-[1em] h-[1em] inline-block text-current align-middle" 
+    style={{ width: '1em', height: '1em' }}
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    viewBox="0 0 24 24" 
+    aria-hidden="true"
+  >
+    <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h18m-4.5-9L21 12m0 0l-4.5 4.5M21 12H3" />
+  </svg>
+  Code
+</p></div><h2>Design without performance<br />is <em>decoration.</em><br />Code without design<br />is <em>infrastructure.</em></h2><div className="philosophy-bottom"><p>My practice brings both disciplines to the table: visually distinctive websites that stay fast, responsive, accessible, and maintainable long after launch.</p><span className="philosophy-symbol inline-block align-middle" aria-hidden="true">
   <svg 
     className="w-[1em] h-[1em] text-current" 
     style={{ width: '1em', height: '1em' }}
