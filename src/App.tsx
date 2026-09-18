@@ -42,10 +42,10 @@ const process = [
 function Arrow() { 
   return (
     <svg 
-      className="arrow w-3.5 h-3.5 inline-block align-middle ml-1" 
+      className="arrow w-[1em] h-[1em] inline-block align-baseline ml-1 text-current" 
       fill="none" 
       stroke="currentColor" 
-      strokeWidth="2" 
+      strokeWidth="2.5" 
       viewBox="0 0 24 24" 
       aria-hidden="true"
     >
