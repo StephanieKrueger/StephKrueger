@@ -42,7 +42,8 @@ const process = [
 function Arrow() { 
   return (
     <svg 
-      className="arrow w-[1em] h-[1em] inline-block align-baseline ml-1 text-current" 
+      className="arrow inline-block align-middle ml-1 text-current" 
+      style={{ width: '0.85em', height: '0.85em' }}
       fill="none" 
       stroke="currentColor" 
       strokeWidth="2.5" 
